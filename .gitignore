@@ -1,0 +1,11 @@
+#Virtual environment
+venv
+
+#Python
+__pycache__
+
+#Visual Studio Code
+.vscode
+
+#Database(sqlite)
+data.db
