@@ -29,13 +29,12 @@ def recreate():
 @bpdatabase.cli.command('add_data')
 def add_data():
 	"Add test data to the model"
-	users = [
-		{"username": "frodo", "password": "bolson", "name":"Frodo","email":"mordor2003","admin":True}
-	]
-	for user in users:
-		us=Users(**user)
-		db.session.add(us)
-		db.session.commit()
+	with open('test_users.json') as json_file:
+		users = json.load(json_file)
+		for user in users:
+			us=Users(**user)
+			db.session.add(us)
+			db.session.commit()
 
 @bpdatabase.cli.command('import_templates')
 def import_templates():

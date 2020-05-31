@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm # pylint: disable=import-error
 from wtforms import RadioField, BooleanField,StringField, SelectField, PasswordField # pylint: disable=import-error
+from wtforms.fields.html5 import EmailField # pylint: disable=import-error
 from wtforms.validators import Required # pylint: disable=import-error
 
 class MainForm(FlaskForm):
@@ -26,3 +27,10 @@ class MainForm(FlaskForm):
 class LoginForm(FlaskForm):
 	username = StringField('Username', validators=[Required()])
 	password = PasswordField('Password', validators=[Required()])
+
+class SignupForm(FlaskForm):
+	username = StringField('Username', validators=[Required()])
+	password = PasswordField('Password', validators=[Required()])
+	name = StringField('Full name', validators=[Required()])
+	email = EmailField('Email')
+

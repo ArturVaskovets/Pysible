@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap # pylint: disable=import-error
 from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
 from flask_login import LoginManager, login_user, logout_user, login_required,	current_user # pylint: disable=import-error
 from Pysible import config
-from Pysible.forms import MainForm, LoginForm
+from Pysible.forms import MainForm, LoginForm, SignupForm
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -49,7 +49,8 @@ def login():
 			login_user(user)
 			next = request.args.get('next')
 			return redirect(next or url_for('start'))
-		form.username.errors.append("Username or password are incorrect")
+		else:
+			form.username.errors.append("Username or password are incorrect")
 	return render_template('login.html', form=form)
 
 @app.route('/logout')
@@ -57,9 +58,24 @@ def logout():
 	logout_user()
 	return redirect(url_for('login'))
 
-@app.route('/signup')
+@app.route('/signup', methods=["get","post"])
 def signup():
-	return render_template('signup.html')
+	if current_user.is_authenticated:
+		return redirect(url_for("start"))
+
+	form = SignupForm()
+	if form.validate_on_submit():
+		user=Users.query.filter_by(username=form.username.data).first()
+		if user==None:
+			user = Users()
+			form.populate_obj(user)
+			db.session.add(user)
+			db.session.commit()
+			login_user(user)
+			return redirect(url_for('start'))
+		else:
+			form.username.errors.append("User exists")
+	return render_template('signup.html', form=form)
 
 @app.route('/projects')
 def projects():
