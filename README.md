@@ -1,6 +1,6 @@
 ## Pysible
 
-Pysible is a simple .yaml generator for Ansible projects.
+Pysible is a simple playbook generator for Ansible projects.
 
 Inspired by [Phansible](http://phansible.com)
 

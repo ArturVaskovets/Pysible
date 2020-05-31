@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block title %}Pysible{% endblock %}
+
+{% block navbar %}
+{{ super() }}
+<div class="jumbotron text-center">
+	<div class="container">
+		<h1>Pysible - Ansible Helper</h1>
+		<p class="lead">Generate a playbook for Ansible has never been so easy</p>
+	</div>
+  </div>
+{% endblock %}
+
+{% block contents %}
+<div class="container">
+	<form method="POST">
+		{{ form.csrf_token }}
+		<div class="row">
+			<div class="col">
+				<div id="accordion">
+					<div class="card">
+						<div class="card-header" id="headingGeneral">
+							<h5 class="mb-0">
+							<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseGeneral" aria-expanded="false" aria-controls="collapseGeneral">
+								General
+							</div>
+							</h5>
+						</div>
+						<div id="collapseGeneral" class="collapse" aria-labelledby="headingGeneral" data-parent="#accordion">
+							<div class="card-body">
+								<h3>General configuration</h3>
+								<div class="form-group">
+									{{ form.playbook_name.label() }}
+									<div class="input-group">
+										{{ form.playbook_name(class="form-control") }}
+										<div class="input-group-append">
+											<span class="input-group-text">.yaml</span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									
+								</div>
+								<div class="form-group">
+									
+								</div>
+								<div class="form-group">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header" id="headingWebservers">
+							<h5 class="mb-0">
+							<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseWebservers" aria-expanded="false" aria-controls="collapseWebservers">
+								Webservers
+							</div>
+							</h5>
+						</div>
+						<div id="collapseWebservers" class="collapse" aria-labelledby="headingWebservers" data-parent="#accordion">
+							<div class="card-body">
+								<h3>Webserver</h3>
+								<div class="form-group">
+									<div class="form-check">
+										{{ form.install_webserver(class="form-check-input") }}
+										{{ form.install_webserver.label(class="form-check-label") }}
+									</div>
+								</div>
+								<div class="form-group">
+									{{ form.server_types.label() }}
+									<div class="form-control">
+										{% for server_type in form.server_types %}
+										<div class="form-check form-check-inline">
+											{{ server_type(class="form-check-input") }}
+											{{ server_type.label(class="form-check-label") }}
+										</div>
+									{% endfor %}
+									</div>
+									
+								</div>
+								<div class="form-group">
+									{{ form.document_root.label() }}
+									{{ form.document_root(class="form-control") }}
+								</div>
+								<div class="form-group">
+									{{ form.server_name.label() }}
+									{{ form.server_name(class="form-control") }}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header" id="headingInterpreters">
+							<h5 class="mb-0">
+							<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseInterpreters" aria-expanded="false" aria-controls="collapseInterpreters">
+								Interpreters
+							</div>
+							</h5>
+						</div>
+						<div id="collapseInterpreters" class="collapse" aria-labelledby="headingInterpreters" data-parent="#accordion">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-6">
+										<h3>PHP</h3>
+										<div class="form-group">
+											<div class="form-check">
+												{{ form.install_php(class="form-check-input") }}
+												{{ form.install_php.label(class="form-check-label") }}
+											</div>
+										</div>
+										<div class="form-group">
+											{{ form.version_php.label() }}
+											{{ form.version_php(class="form-control") }}
+										</div>
+										<div class="form-group">
+
+										</div>
+										<div class="form-group">
+
+										</div>
+										<div class="form-group">
+
+										</div>
+									</div>
+									<div class="col-md-6">
+										<h3>Python</h3>
+										<div class="form-group">
+											<div class="form-check">
+												{{ form.install_python(class="form-check-input") }}
+												{{ form.install_python.label(class="form-check-label") }}
+											</div>
+										</div>
+										<div class="form-group">
+											{{ form.version_python.label() }}
+											{{ form.version_python(class="form-control") }}
+										</div>
+										<div class="form-group">
+
+										</div>
+										<div class="form-group">
+
+										</div>
+										<div class="form-group">
+
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+
+								</div>
+								<div class="form-group">
+
+								</div>
+								<div class="form-group">
+
+								</div>
+								<div class="form-group">
+
+								</div>
+								<div class="form-group">
+
+								</div>
+								<div class="form-group">
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header" id="headingDatabases">
+							<h5 class="mb-0">
+							<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseDatabases" aria-expanded="false" aria-controls="collapseDatabases">
+								Databases
+							</div>
+							</h5>
+						</div>
+						<div id="collapseDatabases" class="collapse" aria-labelledby="headingDatabases" data-parent="#accordion">
+							<div class="card-body">
+								No data yet.
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header" id="headingTimezones">
+							<h5 class="mb-0">
+							<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseTimezones" aria-expanded="false" aria-controls="collapseTimezones">
+								Timezones
+							</div>
+							</h5>
+						</div>
+						<div id="collapseTimezones" class="collapse" aria-labelledby="headingTimezones" data-parent="#accordion">
+							<div class="card-body">
+								No data yet.
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-header" id="headingDHCP">
+							<h5 class="mb-0">
+							<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseDHCP" aria-expanded="false" aria-controls="collapseDHCP">
+								DHCP
+							</div>
+							</h5>
+						</div>
+						<div id="collapseDHCP" class="collapse" aria-labelledby="headingDHCP" data-parent="#accordion">
+							<div class="card-body">
+								No data yet.
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mt-3">
+					<input type="submit" class="btn btn-primary" value="Generate"/>
+					<input type="button" class="btn btn-success" value="Save"/>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "bootstrap/base.html" %}
+{% block styles %}
+	{{ super() }}
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-expand-lg py-2 navbar-light shadow-sm " style="background-color: #20CC8D">
+	<div class="container">
+		<a href="{{ url_for('start') }}" class="navbar-brand">
+			<img class="d-inline-block align-middle mr-2" src="{{url_for('static', filename='img/logo.png')}}" width="50" alt="" >
+			<span class="font-weight-bold">Pysible</span>
+		</a>
+		<button type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+		<div id="navbarSupportedContent" class="collapse navbar-collapse">
+			<ul class="navbar-nav ml-auto font-weight-bold">
+				<li class="nav-item {% if request.path == '/'  %}active{% endif %}"><a href="{{ url_for('start') }}" class="nav-link">Home</a></li>
+				<li class="nav-item {% if request.path == '/about'  %}active{% endif %}"><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
+				<li class="nav-item {% if request.path == '/login'  %}active{% endif %}"><a href="{{ url_for('login') }}" class="nav-link">Sign In</a></li>
+				<li class="nav-item {% if request.path == '/signup'  %}active{% endif %}"><a href="{{ url_for('signup') }}" class="nav-link">Sign Up</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		{% block contents %}{% endblock %}
+	</div>
+</div>
+{% endblock %}

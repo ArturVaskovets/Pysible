@@ -1,0 +1,12 @@
+{
+	"base" : "---\n- name: Automaticaly generated playbook\n\thosts: all\n",
+	"tasks" : "\ttasks:\n",
+	"handlers" : "\thandlers:\n",
+	"apache_tasks" : "\t\t- name: Actualizar repositorios\n\t\t\tapt:\n\t\t\t\tupdate_cache: yes\n\t\t\t\tcache_valid_time: 3600\n\n\t\t- name: Instalar Apache\n\t\t\tapt:\n\t\t\t\tname: apache2\n\t\t\t\tinstall_recommends: yes\n\t\t\t\tstate: present\n\n\t\t- name: Cambiar document root\n\t\t\tlineinfile:\n\t\t\t\tdest: \"/etc/apache2/sites-available/000-default.conf\"\n\t\t\t\tregexp: \"/var/www/html\"\n\t\t\t\tline: \"{{ document_root }}\"\n\t\t\t\tstate: present\n\t\t\tnotify:\n\t\t\t\t- restart apache2\n\n\t\t- name: Cambiar nombre del servidor\n\t\t\tlineinfile:\n\t\t\t\tdest: \"/etc/apache2/sites-available/000-default.conf\"\n\t\t\t\tregexp: \"#ServerName www.example.com\"\n\t\t\t\tline: \"ServerName {{ server_name }}\"\n\t\t\t\tstate: present\n\t\t\tnotify:\n\t\t\t\t- restart apache2\n\n\n",
+	"apache_handlers" : "\t\t- name: restart apache2\n\t\t\tservice:\n\t\t\t\tname: apache2\n\t\t\t\tstate: restarted\n\n",
+	"nginx_tasks" : "\t\t- name: Actualizar repositorios\n\t\t\tapt:\n\t\t\t\tupdate_cache: yes\n\t\t\t\tcache_valid_time: 3600\n\n\t\t- name: Instalar Nginx\n\t\t\tapt:\n\t\t\t\tname: nginx\n\t\t\t\tinstall_recommends: yes\n\t\t\t\tstate: present\n\n\t\t- name: Cambiar document root\n\t\t\tlineinfile:\n\t\t\t\tdest: \"/etc/nginx/sites-available/default\"\n\t\t\t\tregexp: \"/var/www/html\"\n\t\t\t\tline: \"{{ document_root }}\"\n\t\t\t\tstate: present\n\t\t\tnotify:\n\t\t\t\t- restart nginx\n\n\t\t- name: Cambiar nombre del servidor\n\t\t\tlineinfile:\n\t\t\t\tdest: \"/etc/nginx/sites-available/default\"\n\t\t\t\tregexp: \"server_name _;\"\n\t\t\t\tline: \"server_name {{ server_name }};\"\n\t\t\t\tstate: present\n\t\t\tnotify:\n\t\t\t\t- restart nginx\n\n\n",
+	"nginx_handlers" : "\t\t- name: restart nginx\n\t\t\tservice:\n\t\t\t\tname: nginx\n\t\t\t\tstate: restarted\n\n",
+	"php_tasks" : "\t\t- name: Actualizar repositorios\n\t\t\tapt:\n\t\t\t\tupdate_cache: yes\n\t\t\t\tcache_valid_time: 3600\n\n\t\t- name: Instalar PHP\n\t\t\tapt: \n\t\t\t\tname: {{ '{{' }} items {{ '}}' }}\n\t\t\t\tstate: present\n\t\t\twith_items:\n\t\t\t\t- php{{ version }}\n\t\t\t\t- php{{ version }}-cli\n\t\t\t\t- php{{ version }}-common\n\n\n",
+	"python_tasks" : "\t\t- name: Actualizar repositorios\n\t\t\tapt:\n\t\t\t\tupdate_cache: yes\n\t\t\t\tcache_valid_time: 3600\n\n\t\t- name: Instalar Python\n\t\t\tapt: \n\t\t\t\tname: python{{ version }}\n\t\t\t\tstate: present\n\n\n"
+}
+
