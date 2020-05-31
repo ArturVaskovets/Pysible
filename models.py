@@ -16,7 +16,7 @@ class Users(db.Model):
 	username = Column(String(100),nullable=False)
 	password_hash = Column(String(128),nullable=False)
 	name = Column(String(200),nullable=False)
-	email = Column(String(200),nullable=False)
+	email = Column(String(200))
 	admin = Column(Boolean, default=False)
 
 	def __repr__(self):

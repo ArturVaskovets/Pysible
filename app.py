@@ -1,18 +1,18 @@
-from flask import Flask, render_template, render_template_string, Response, abort # pylint: disable=import-error
+from flask import Flask, render_template, render_template_string, Response, abort, redirect, url_for, request # pylint: disable=import-error
 from flask_bootstrap import Bootstrap # pylint: disable=import-error
 from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
 from flask_login import LoginManager, login_user, logout_user, login_required,	current_user # pylint: disable=import-error
 from Pysible import config
-from Pysible.forms import MainForm
+from Pysible.forms import MainForm, LoginForm
 
 app = Flask(__name__)
 app.config.from_object(config)
 Bootstrap(app)
 db = SQLAlchemy(app)
 
-#login_manager = LoginManager()
-#login_manager.init_app(app)
-#login_manager.login_view = "login"
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
 
 from Pysible.cli import bpdatabase, bpflask
 app.register_blueprint(bpdatabase)
@@ -37,13 +37,25 @@ def save():
 def about():
 	return render_template('about.html')
 
-@app.route('/login')
+@app.route('/login', methods=["get","post"])
 def login():
-	return render_template('login.html')
+	if current_user.is_authenticated:
+		return redirect(url_for("start"))
+
+	form = LoginForm()
+	if form.validate_on_submit():
+		user=Users.query.filter_by(username=form.username.data).first()
+		if user!=None and user.verify_password(form.password.data):
+			login_user(user)
+			next = request.args.get('next')
+			return redirect(next or url_for('start'))
+		form.username.errors.append("Username or password are incorrect")
+	return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
-	return render_template('logout.html')
+	logout_user()
+	return redirect(url_for('login'))
 
 @app.route('/signup')
 def signup():
@@ -56,6 +68,10 @@ def projects():
 @app.route('/tests')
 def tests():
 	return render_template('tests.html')
+
+@login_manager.user_loader
+def load_user(user_id):
+	return Users.query.get(int(user_id))
 
 def generatePlaybook(form):
 	try:

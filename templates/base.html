@@ -15,8 +15,24 @@
 			<ul class="navbar-nav ml-auto font-weight-bold">
 				<li class="nav-item {% if request.path == '/'  %}active{% endif %}"><a href="{{ url_for('start') }}" class="nav-link">Home</a></li>
 				<li class="nav-item {% if request.path == '/about'  %}active{% endif %}"><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
-				<li class="nav-item {% if request.path == '/login'  %}active{% endif %}"><a href="{{ url_for('login') }}" class="nav-link">Sign In</a></li>
-				<li class="nav-item {% if request.path == '/signup'  %}active{% endif %}"><a href="{{ url_for('signup') }}" class="nav-link">Sign Up</a></li>
+				{% if current_user.is_authenticated %}
+					<li class="nav-item dropdown {% if request.path == '/projects'  %}active{% endif %}">
+						<a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{{ current_user.name }}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="userDropdown">
+							<a class="dropdown-item" href="{{ url_for('projects') }}">Projects</a>
+							<a class="dropdown-item" href="{{ url_for('projects') }}">Projects</a>
+							<a class="dropdown-item" href="{{ url_for('projects') }}">Projects</a>
+							<a class="dropdown-item" href="{{ url_for('projects') }}">Projects</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+						</div>
+					</li>
+				{% else %}
+					<li class="nav-item {% if request.path == '/login'  %}active{% endif %}"><a href="{{ url_for('login') }}" class="nav-link">Sign In</a></li>
+					<li class="nav-item {% if request.path == '/signup'  %}active{% endif %}"><a href="{{ url_for('signup') }}" class="nav-link">Sign Up</a></li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm # pylint: disable=import-error
-from wtforms import RadioField, BooleanField,StringField, SelectField # pylint: disable=import-error
+from wtforms import RadioField, BooleanField,StringField, SelectField, PasswordField # pylint: disable=import-error
 from wtforms.validators import Required # pylint: disable=import-error
 
 class MainForm(FlaskForm):
@@ -22,3 +22,7 @@ class MainForm(FlaskForm):
 	#Python
 	install_python = BooleanField('Install Python', default=False)
 	version_python = SelectField('Version', choices=[('', '2.7'), ('3', '3.5+')], default='')
+
+class LoginForm(FlaskForm):
+	username = StringField('Username', validators=[Required()])
+	password = PasswordField('Password', validators=[Required()])
