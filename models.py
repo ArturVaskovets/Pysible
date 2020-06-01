@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean # pylint: disable=import-error
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey # pylint: disable=import-error
+from sqlalchemy.orm import relationship # pylint: disable=import-error
 from werkzeug.security import generate_password_hash, check_password_hash # pylint: disable=import-error
 from Pysible.app import db
 
@@ -8,6 +9,14 @@ class Templates(db.Model):
 	id = Column(String(100), primary_key = True, nullable=False)
 	text = Column(String(500), nullable=False)
 
+class Projects(db.Model):
+	"""Projects of each user"""
+	__tablename__ = 'projects'
+	id = Column(Integer, primary_key=True)
+	name = Column(String(100),nullable=False)
+	description = Column(String(255))
+	user_id = Column(Integer,ForeignKey('users.id') ,nullable=False)
+	user = relationship("Users", backref="Projects")
 
 class Users(db.Model):
 	"""Users and admins"""

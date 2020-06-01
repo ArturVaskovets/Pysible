@@ -1,9 +1,11 @@
-from flask import Flask, render_template, render_template_string, Response, abort, redirect, url_for, request # pylint: disable=import-error
+from flask import Flask, render_template, render_template_string, Response, abort, redirect, url_for, request,send_from_directory # pylint: disable=import-error
 from flask_bootstrap import Bootstrap # pylint: disable=import-error
 from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
 from flask_login import LoginManager, login_user, logout_user, login_required,	current_user # pylint: disable=import-error
 from Pysible import config
 from Pysible.forms import MainForm, LoginForm, SignupForm
+import os
+import shutil
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -17,7 +19,7 @@ login_manager.login_view = "login"
 from Pysible.cli import bpdatabase, bpflask
 app.register_blueprint(bpdatabase)
 app.register_blueprint(bpflask)
-from Pysible.models import Templates, Users
+from Pysible.models import Templates, Users, Projects
 
 @app.route('/', methods=["get","post"])
 def start():
@@ -29,13 +31,43 @@ def start():
 	else:
 		return render_template('home.html', form=form)
 
-@app.route('/save')
+@app.route('/save', methods=["post"])
+@login_required
 def save():
-	pass
+	form = MainForm()
+	if form.validate_on_submit():
+		path = app.config["PROJECTS_DIR"] + Users.query.get(current_user.id).username + "/"
+		filename = form.playbook_name.data + ".yaml"
+
+		#Potential errors
+		if not os.path.exists(path):
+			os.makedirs(path)
+		if os.path.isfile(path + filename):
+			form.playbook_name.errors.append("File exists")
+			return render_template('home.html', form=form)
+
+		#Write file
+		playbook = generatePlaybook(form)
+		with open(path + filename, "w") as f:
+			f.write(playbook)
+
+		#Add project to database
+		project = Projects(name=form.playbook_name.data,description=form.description.data,user_id=current_user.id)
+		db.session.add(project)
+		db.session.commit()
+
+
+		return redirect(url_for("projects"))
+	else:
+		return render_template('home.html', form=form)
 
 @app.route('/about')
 def about():
 	return render_template('about.html')
+
+@app.route('/account')
+def account():
+	return render_template('account.html')
 
 @app.route('/login', methods=["get","post"])
 def login():
@@ -67,10 +99,18 @@ def signup():
 	if form.validate_on_submit():
 		user=Users.query.filter_by(username=form.username.data).first()
 		if user==None:
+			#Database
 			user = Users()
 			form.populate_obj(user)
 			db.session.add(user)
 			db.session.commit()
+
+			#File system
+			path = app.config["PROJECTS_DIR"] + user.username + "/"
+			if os.path.exists(path):
+				shutil.rmtree(path)
+			os.makedirs(path)
+
 			login_user(user)
 			return redirect(url_for('start'))
 		else:
@@ -78,8 +118,42 @@ def signup():
 	return render_template('signup.html', form=form)
 
 @app.route('/projects')
+@login_required
 def projects():
-	return render_template('projects.html')
+	projects = Projects.query.filter_by(user_id=current_user.id)
+	return render_template('projects.html', projects=projects)
+
+@app.route('/download/<name>')
+@login_required
+def download(name):
+	path = app.config["PROJECTS_DIR"] + Users.query.get(current_user.id).username + "/"
+	filename = name + ".yaml"
+
+	if not os.path.isfile(path + filename):
+		abort(404)
+
+	return send_from_directory(directory=path, filename=filename, as_attachment=True)
+
+@app.route('/delete/<name>')
+@login_required
+def delete(name):
+	path = app.config["PROJECTS_DIR"] + Users.query.get(current_user.id).username + "/"
+	filename = name + ".yaml"
+
+	if not os.path.isfile(path + filename):
+		abort(404)
+
+	os.remove(path + filename)
+	project = Projects.query.filter_by(user_id=current_user.id, name=name).first()
+	db.session.delete(project)
+	db.session.commit()
+
+	return redirect(url_for("projects"))
+
+@app.route('/share')
+@login_required
+def share():
+	return redirect(url_for("projects"))
 
 @app.route('/tests')
 def tests():

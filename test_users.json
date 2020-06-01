@@ -1,7 +1,7 @@
 [
-	{"username": "frodo", "password": "bolson", "name":"Frodo","email":"mordor2003@gmail.com","admin": false},
-	{"username": "artur", "password": "artur", "name":"Artur","email":"artur@gmail.com","admin": true},
-	{"username": "user", "password": "user", "name":"User","admin": false},
-	{"username": "admin", "password": "admin", "name":"Admin","admin": true}
+	{"id":1, "username": "frodo", "password": "bolson", "name":"Frodo","email":"mordor2003@gmail.com","admin": false},
+	{"id":2, "username": "artur", "password": "artur", "name":"Artur","email":"artur@gmail.com","admin": true},
+	{"id":3, "username": "user", "password": "user", "name":"User","admin": false},
+	{"id":4, "username": "admin", "password": "admin", "name":"Admin","admin": true}
 ]
 

@@ -1,5 +1,5 @@
 {
-	"base" : "---\n- name: Automaticaly generated playbook\n\thosts: all\n",
+	"base" : "---\n- name: Automatically generated playbook\n\thosts: all\n",
 	"tasks" : "\ttasks:\n",
 	"handlers" : "\thandlers:\n",
 	"apache_tasks" : "\t\t- name: Actualizar repositorios\n\t\t\tapt:\n\t\t\t\tupdate_cache: yes\n\t\t\t\tcache_valid_time: 3600\n\n\t\t- name: Instalar Apache\n\t\t\tapt:\n\t\t\t\tname: apache2\n\t\t\t\tinstall_recommends: yes\n\t\t\t\tstate: present\n\n\t\t- name: Cambiar document root\n\t\t\tlineinfile:\n\t\t\t\tdest: \"/etc/apache2/sites-available/000-default.conf\"\n\t\t\t\tregexp: \"/var/www/html\"\n\t\t\t\tline: \"{{ document_root }}\"\n\t\t\t\tstate: present\n\t\t\tnotify:\n\t\t\t\t- restart apache2\n\n\t\t- name: Cambiar nombre del servidor\n\t\t\tlineinfile:\n\t\t\t\tdest: \"/etc/apache2/sites-available/000-default.conf\"\n\t\t\t\tregexp: \"#ServerName www.example.com\"\n\t\t\t\tline: \"ServerName {{ server_name }}\"\n\t\t\t\tstate: present\n\t\t\tnotify:\n\t\t\t\t- restart apache2\n\n\n",

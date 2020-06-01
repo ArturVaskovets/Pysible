@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm # pylint: disable=import-error
-from wtforms import RadioField, BooleanField,StringField, SelectField, PasswordField # pylint: disable=import-error
+from wtforms import RadioField, BooleanField,StringField, SelectField, PasswordField, TextField # pylint: disable=import-error
 from wtforms.fields.html5 import EmailField # pylint: disable=import-error
 from wtforms.validators import Required # pylint: disable=import-error
 
 class MainForm(FlaskForm):
 	#General
 	playbook_name = StringField('Playbook name',default='playbook', validators=[Required("This field is required")])
+	description = TextField('Description',default='')
 
 
 	#Webservers section

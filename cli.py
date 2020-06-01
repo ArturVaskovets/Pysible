@@ -1,7 +1,7 @@
 import click # pylint: disable=import-error
 from flask import Blueprint # pylint: disable=import-error
 from Pysible.app import db
-from Pysible.models import Templates, Users
+from Pysible.models import Templates, Users, Projects
 import json
 
 bpdatabase = Blueprint('bpdatabase', __name__, cli_group="db")
@@ -46,6 +46,16 @@ def import_templates():
 			db.session.add(template)
 			db.session.commit()
 
+@bpdatabase.cli.command('import_projects')
+def import_projects():
+	"Import test user projects into database"
+	with open('test_projects.json') as json_file:
+		projects = json.load(json_file)
+		for project in projects:
+			proj = Projects(**project)
+			db.session.add(proj)
+			db.session.commit()
+
 @bpdatabase.cli.command('set_admin')
 def set_admin():
 	"Create test admin. Don't use in production."
@@ -71,3 +81,5 @@ def init_app(ctx, debug):
 	db.drop_all()
 	ctx.invoke(create, with_data=debug)
 	ctx.invoke(import_templates)
+	if debug:
+		ctx.invoke(import_projects)

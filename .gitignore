@@ -9,3 +9,6 @@ __pycache__
 
 #Database(sqlite)
 data.db
+
+#User projects
+user_projects/*
