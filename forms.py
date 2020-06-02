@@ -5,7 +5,7 @@ from wtforms.validators import Required # pylint: disable=import-error
 
 class MainForm(FlaskForm):
 	#General
-	playbook_name = StringField('Playbook name',default='playbook', validators=[Required("This field is required")])
+	playbook_name = StringField('Playbook name',default='playbook', validators=[Required('This field is required')])
 	description = TextField('Description',default='')
 
 
@@ -26,12 +26,18 @@ class MainForm(FlaskForm):
 	version_python = SelectField('Version', choices=[('', '2.7'), ('3', '3.5+')], default='')
 
 class LoginForm(FlaskForm):
-	username = StringField('Username', validators=[Required()])
-	password = PasswordField('Password', validators=[Required()])
+	username = StringField('Username', validators=[Required('This field is required')])
+	password = PasswordField('Password', validators=[Required('This field is required')])
 
 class SignupForm(FlaskForm):
-	username = StringField('Username', validators=[Required()])
-	password = PasswordField('Password', validators=[Required()])
-	name = StringField('Full name', validators=[Required()])
+	username = StringField('Username', validators=[Required('This field is required')])
+	password = PasswordField('Password', validators=[Required('This field is required')])
+	name = StringField('Full name', validators=[Required('This field is required')])
+	email = EmailField('Email')
+
+class AccountEditForm(FlaskForm):
+	username = StringField('Username', validators=[Required('This field is required')])
+	password = PasswordField('New password', default='')
+	name = StringField('Full name', validators=[Required('This field is required')])
 	email = EmailField('Email')
 

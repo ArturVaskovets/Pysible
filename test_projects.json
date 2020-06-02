@@ -1,6 +1,0 @@
-[
-	{"name":"playbook", "description":"Simple playbook", "user_id": 1},
-	{"name":"lalala", "description":"Other playbook", "user_id": 1},
-	{"name":"script", "description":"Some script", "user_id": 3},
-	{"name":"name", "description":"description", "user_id": 4}
-]

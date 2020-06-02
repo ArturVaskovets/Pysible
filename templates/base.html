@@ -1,8 +1,5 @@
 {% extends "bootstrap/base.html" %}
-{% block styles %}
-	{{ super() }}
-	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
-{% endblock %}
+
 {% block navbar %}
 <nav class="navbar navbar-expand-lg py-1 navbar-light border-bottom box-shadow" style="background-color: #3CA3A3">
 	<div class="container">
@@ -16,11 +13,17 @@
 				<li class="nav-item {% if request.path == '/'  %}font-weight-bold active{% endif %}">
 					<a href="{{ url_for('start') }}" class="nav-link text-dark">Home</a>
 				</li>
-				<li class="nav-item {% if request.path == '/about'  %}font-weight-bold active{% endif %}">
+				<li class="nav-item {% if request.path == '/about' %}font-weight-bold active{% endif %}">
 					<a href="{{ url_for('about') }}" class="nav-link text-dark">About</a>
 				</li>
+				{% if current_user.is_authenticated and current_user.is_admin() %}
+					<li class="nav-item {% if request.path == '/users' or '/account/' in request.path or '/projects/' in request.path %}font-weight-bold active{% endif %}">
+						<a href="{{ url_for('users') }}" class="nav-link text-dark">Users</a>
+					</li>
+				{% endif %}
+
 				{% if current_user.is_authenticated %}
-					<li class="nav-item dropdown {% if request.path == '/projects'  %}font-weight-bold active{% endif %}">
+					<li class="nav-item dropdown {% if request.path == '/projects' or request.path == '/account' %}font-weight-bold active{% endif %}">
 						<a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							{{ current_user.name }}
 						</a>

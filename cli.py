@@ -1,8 +1,10 @@
 import click # pylint: disable=import-error
 from flask import Blueprint # pylint: disable=import-error
-from Pysible.app import db
+from Pysible.app import db, app
 from Pysible.models import Templates, Users, Projects
 import json
+import shutil
+import os
 
 bpdatabase = Blueprint('bpdatabase', __name__, cli_group="db")
 
@@ -15,16 +17,19 @@ def create(ctx, with_data=False):
 	if with_data:
 		ctx.invoke(add_data)
 
+
 @bpdatabase.cli.command('drop')
 def drop():
 	"Drop all project relational database tables with data"
 	db.drop_all()
+
 
 @bpdatabase.cli.command('recreate')
 def recreate():
 	"Recreate all the tables in case you have changed the model"
 	db.drop_all()
 	db.create_all()
+
 
 @bpdatabase.cli.command('add_data')
 def add_data():
@@ -36,6 +41,7 @@ def add_data():
 			db.session.add(us)
 			db.session.commit()
 
+
 @bpdatabase.cli.command('import_templates')
 def import_templates():
 	"Import ansible templates from file"
@@ -46,33 +52,22 @@ def import_templates():
 			db.session.add(template)
 			db.session.commit()
 
-@bpdatabase.cli.command('import_projects')
-def import_projects():
-	"Import test user projects into database"
-	with open('test_projects.json') as json_file:
-		projects = json.load(json_file)
-		for project in projects:
-			proj = Projects(**project)
-			db.session.add(proj)
-			db.session.commit()
 
-@bpdatabase.cli.command('set_admin')
-def set_admin():
-	"Create test admin. Don't use in production."
-	pass
+@bpdatabase.cli.command('wipe_projects')
+def wipe_projects():
+	"Remove all the projects both in database and in filesystem"
+	projects = Projects.query.all()
+	for project in projects:
+		db.session.delete(project)
+		db.session.commit()
 
-@bpdatabase.cli.command('wipe')
-def wipe():
-	"Remove the data but not model"
-	pass
-
-@bpdatabase.cli.command('print_all')
-def print_all():
-	"Print all data in the table"
-	pass
+	path = app.config["PROJECTS_DIR"] + "/"
+	shutil.rmtree(path)
+	os.makedirs(path)
 
 
 bpflask = Blueprint('bpflask', __name__, cli_group=None)
+
 @bpflask.cli.command('init_app')
 @click.option('-d', '--debug', is_flag=True, help='Import data for tests')
 @click.pass_context
@@ -80,6 +75,26 @@ def init_app(ctx, debug):
 	"Do all necessary work to run the app: create database, import templates, etc."
 	db.drop_all()
 	ctx.invoke(create, with_data=debug)
+	ctx.invoke(wipe_projects)
 	ctx.invoke(import_templates)
-	if debug:
-		ctx.invoke(import_projects)
+
+
+@bpflask.cli.command('show_users')
+def show_users():
+	"Print all registered users"
+	users = Users.query.all()
+	for user in users:
+		print(user)
+
+
+@bpflask.cli.command('set_admin')
+@click.option('-u', '--unset', is_flag=True, help='Reverse action, unset admin')
+@click.argument('username')
+def set_admin(username, unset):
+	"Converts one registrated user into admin."
+	user = Users.query.filter_by(username=username).first()
+	if user is None:
+		print("User doesn't exist")
+	else:
+		user.admin = False if unset else True
+		db.session.commit()

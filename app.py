@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap # pylint: disable=import-error
 from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
 from flask_login import LoginManager, login_user, logout_user, login_required,	current_user # pylint: disable=import-error
 from Pysible import config
-from Pysible.forms import MainForm, LoginForm, SignupForm
+from Pysible.forms import MainForm, LoginForm, SignupForm, AccountEditForm
 import os
 import shutil
 
@@ -65,9 +65,81 @@ def save():
 def about():
 	return render_template('about.html')
 
+@app.route('/users')
+@login_required
+def users():
+	if not current_user.is_admin(): # Only admins can access here
+		abort(403)
+
+	users = Users.query.all()
+	return render_template('users.html', users=users)
+
+@app.route('/user_delete/<username>')
+@login_required
+def user_delete(username):
+	if current_user.username == username or not current_user.is_admin(): # Only admins can delete users but can't delete themselves
+		abort(403)
+
+	user = Users.query.filter_by(username=username).first()
+	if user is None:
+		abort(404)
+
+	projects = Projects.query.filter_by(user_id=user.id)
+	for project in projects:
+		db.session.delete(project)
+		db.session.commit()
+	
+	db.session.delete(user)
+	db.session.commit()
+
+	path = app.config["PROJECTS_DIR"] + username + "/"
+	if os.path.exists(path):
+		shutil.rmtree(path)
+
+	return redirect(url_for("users"))
+
 @app.route('/account')
-def account():
-	return render_template('account.html')
+@app.route('/account/<username>')
+@login_required
+def account(username = None):
+	form = AccountEditForm()
+	if username is None:
+		username = current_user.username
+
+	if current_user.username != username and not current_user.is_admin(): # Only owner and admins can access here
+		abort(403)
+
+	user = Users.query.filter_by(username=username).first()
+	if user is None:
+		abort(404)
+
+	form.username.data = user.username
+	form.name.data = user.name
+	form.email.data = user.email
+
+	return render_template('account.html', form=form, username=username)
+
+@app.route('/account_edit/<username>', methods=["post"]) # Adapted both for users and for admins
+@login_required
+def account_edit(username):
+	if current_user.username != username and not current_user.is_admin(): # Only owner and admins can change account
+		abort(403)
+
+	form = AccountEditForm()
+	user = Users.query.filter_by(username=username).first()
+	if user is None:
+		abort(404)
+
+	if form.validate_on_submit(): # For security reasons admin status can be set only with 'set_admin' cli command
+		user.name = form.name.data
+		user.email = form.email.data
+		if form.password.data != '':
+			user.password = form.password.data
+		db.session.commit()
+	else:
+		abort(500)
+
+	return redirect(url_for("start"))
 
 @app.route('/login', methods=["get","post"])
 def login():
@@ -118,15 +190,29 @@ def signup():
 	return render_template('signup.html', form=form)
 
 @app.route('/projects')
+@app.route('/projects/<username>')
 @login_required
-def projects():
-	projects = Projects.query.filter_by(user_id=current_user.id)
-	return render_template('projects.html', projects=projects)
+def projects(username = None):
+	if username is None:
+		username = current_user.username
 
-@app.route('/download/<name>')
+	if current_user.username != username and not current_user.is_admin(): # Only owner and admins can access here
+		abort(403)
+	
+	user = Users.query.filter_by(username=username).first()
+	if user is None:
+		abort(404)
+
+	projects = Projects.query.filter_by(user_id=user.id)
+	return render_template('projects.html', projects=projects, username=username)
+
+@app.route('/project_download/<username>/<name>')
 @login_required
-def download(name):
-	path = app.config["PROJECTS_DIR"] + Users.query.get(current_user.id).username + "/"
+def project_download(username, name):
+	if current_user.username != username and not current_user.is_admin(): # Only owner and admins can download the project
+		abort(403)
+
+	path = app.config["PROJECTS_DIR"] + username + "/"
 	filename = name + ".yaml"
 
 	if not os.path.isfile(path + filename):
@@ -134,26 +220,34 @@ def download(name):
 
 	return send_from_directory(directory=path, filename=filename, as_attachment=True)
 
-@app.route('/delete/<name>')
+@app.route('/project_delete/<username>/<name>')
 @login_required
-def delete(name):
-	path = app.config["PROJECTS_DIR"] + Users.query.get(current_user.id).username + "/"
+def project_delete(username, name):
+	if current_user.username != username and not current_user.is_admin(): # Only owner and admins can delete the project
+		abort(403)
+
+	user = Users.query.filter_by(username=username).first()
+	if user is None:
+		abort(404)
+
+	path = app.config["PROJECTS_DIR"] + username + "/"
 	filename = name + ".yaml"
 
 	if not os.path.isfile(path + filename):
 		abort(404)
-
+		
 	os.remove(path + filename)
-	project = Projects.query.filter_by(user_id=current_user.id, name=name).first()
+
+	project = Projects.query.filter_by(user_id=user.id, name=name).first()
 	db.session.delete(project)
 	db.session.commit()
 
-	return redirect(url_for("projects"))
+	return redirect(url_for("projects", username=username))
 
-@app.route('/share')
+@app.route('/project_share/<username>/<name>')
 @login_required
-def share():
-	return redirect(url_for("projects"))
+def project_share(username, name):
+	return redirect(url_for("projects", username=username))
 
 @app.route('/tests')
 def tests():
