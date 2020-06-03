@@ -287,6 +287,29 @@ def generatePlaybook(form):
 		if form.install_python.data:
 			temp = Templates.query.get('python_tasks').text
 			tasks += render_template_string(temp, version=form.version_python.data)
+
+
+		#Databases
+		if form.install_db.data:
+			if form.db_types.data == 'mysql':
+				temp = Templates.query.get('mysql_tasks').text
+				tasks += render_template_string(temp, 
+					db_delete_anonymous=form.db_delete_anonymous.data, 
+					db_delete_test=form.db_delete_test.data, 
+					db_create_user=form.db_create_user.data, 
+					db_username=form.db_username.data, 
+					db_password=form.db_password.data
+				)
+			elif form.db_types.data == 'postgresql':
+				pass
+			else:
+				pass
+
+
+
+
+
+
 	except:
 		abort(500)
 	

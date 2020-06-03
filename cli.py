@@ -62,7 +62,8 @@ def wipe_projects():
 		db.session.commit()
 
 	path = app.config["PROJECTS_DIR"] + "/"
-	shutil.rmtree(path)
+	if os.path.exists(path):
+		shutil.rmtree(path)
 	os.makedirs(path)
 
 
