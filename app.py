@@ -137,7 +137,7 @@ def account_edit(username):
 			user.password = form.password.data
 		db.session.commit()
 	else:
-		abort(500)
+		abort(400)
 
 	return redirect(url_for("start"))
 
@@ -249,9 +249,10 @@ def project_delete(username, name):
 def project_share(username, name):
 	return redirect(url_for("projects", username=username))
 
-@app.route('/tests')
-def tests():
-	return render_template('tests.html')
+@app.route('/tests/<error>')
+def tests(error):
+	abort(int(error))
+	return redirect(url_for("start"))
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -291,3 +292,28 @@ def generatePlaybook(form):
 	
 	playbook = playbook + tasks + handlers
 	return playbook
+
+@app.errorhandler(400)
+def bad_request(error):
+	return render_template("error.html",message="There are errors in request.", image=url_for('static', filename='img/400.jpg'), sizing="col-10 col-sm-9 col-md-7 col-lg-6 col-xl-4"), 400
+
+@app.errorhandler(403)
+def forbidden(error):
+	return render_template("error.html",message="You don't have permission to access this resource.", image=url_for('static', filename='img/403.jpg'), sizing="col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4"), 403
+
+@app.errorhandler(404)
+def page_not_found(error):
+	return render_template("error.html",message="Requested resource doesn't exist.", image=url_for('static', filename='img/404.jpg'), sizing="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-6"), 404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+	return render_template("error.html",message="Sorry, server can not process the request.", image=url_for('static', filename='img/500.jpg'), sizing="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5"), 500
+
+
+
+
+
+
+
+
+
