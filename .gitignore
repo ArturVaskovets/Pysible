@@ -12,3 +12,6 @@ data.db
 
 #User projects
 user_projects/*
+
+#Only for developers
+tests
