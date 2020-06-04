@@ -187,66 +187,98 @@
 									<div class="form-group">
 										{{ form.db_types.label() }}
 										<div class="form-control">
-											{% for db_type in form.db_types %}
-											<div class="form-check form-check-inline">
-												{{ db_type(class="form-check-input") }}
-												{{ db_type.label(class="form-check-label") }}
+											<div class="row text-sm-center">
+												{% for db_type in form.db_types %}
+												<div class="col-sm">
+													<div class="form-check form-check-inline">
+														{{ db_type(class="form-check-input") }}
+														{{ db_type.label(class="form-check-label") }}
+													</div>
+												</div>
+												{% endfor %}
 											</div>
-										{% endfor %}
 										</div>
 									</div>
-									<div class="form-group">
-										<div class="form-check">
-											{{ form.db_delete_anonymous(class="form-check-input") }}
-											{{ form.db_delete_anonymous.label(class="form-check-label") }}
+									<p class="text-justify">Options. Each system has its own kit of options (corresponding column). If you check an option of other system it will not be applied.</p>
+									<div class="row mb-3">
+										<div class="col-sm">
+											<div class="form-group form-control" style="height: 100%;">
+												<div class="form-check">
+													{{ form.db_delete_anonymous(class="form-check-input") }}
+													{{ form.db_delete_anonymous.label(class="form-check-label") }}
+												</div>
+												<div class="form-check">
+													{{ form.db_delete_test(class="form-check-input") }}
+													{{ form.db_delete_test.label(class="form-check-label") }}
+												</div>
+											</div>
 										</div>
-										<div class="form-check">
-											{{ form.db_delete_test(class="form-check-input") }}
-											{{ form.db_delete_test.label(class="form-check-label") }}
+										<div class="col-sm"></div>
+										<div class="col-sm">
+											<div class="form-group form-control" style="height: 100%;">
+												{{ form.db_dir.label() }}
+												{{ form.db_dir(class="form-control") }}
+											</div>
 										</div>
 									</div>
 									<div class="form-group form-control">
 										<div class="form-check mb-3">
-											{{ form.db_create_user(class="form-check-input") }}
-											{{ form.db_create_user.label(class="form-check-label") }}
+											{{ form.db_create_db(class="form-check-input") }}
+											{{ form.db_create_db.label(class="form-check-label") }}
 										</div>
 										<div class="form-group">
-											{{ form.db_username.label() }}
-											{{ form.db_username(class="form-control") }}
+											{{ form.db_name.label() }}
+											{{ form.db_name(class="form-control") }}
 										</div>
-										<div class="form-group">
-											{{ form.db_password.label() }}
-											{{ form.db_password(class="form-control") }}
+									</div>
+									<div class="row">
+										<div class="col-8">
+											<div class="form-group form-control">
+												<div class="form-check mb-3">
+													{{ form.db_create_user(class="form-check-input") }}
+													{{ form.db_create_user.label(class="form-check-label") }}
+												</div>
+												<div class="form-group">
+													{{ form.db_username.label() }}
+													{{ form.db_username(class="form-control") }}
+												</div>
+												<div class="form-group">
+													{{ form.db_password.label() }}
+													{{ form.db_password(class="form-control") }}
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="card">
-							<div class="card-header" id="headingTimezones">
+							<div class="card-header" id="headingSoon">
 								<h5 class="mb-0">
-								<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseTimezones" aria-expanded="false" aria-controls="collapseTimezones">
-									Timezones
+								<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseSoon" aria-expanded="false" aria-controls="collapseSoon">
+									Soon
 								</div>
 								</h5>
 							</div>
-							<div id="collapseTimezones" class="collapse" aria-labelledby="headingTimezones" data-parent="#accordion">
+							<div id="collapseSoon" class="collapse" aria-labelledby="headingSoon" data-parent="#accordion">
 								<div class="card-body">
-									No data yet.
-								</div>
-							</div>
-						</div>
-						<div class="card">
-							<div class="card-header" id="headingDHCP">
-								<h5 class="mb-0">
-								<div class="btn btn-outline-secondary" data-toggle="collapse" data-target="#collapseDHCP" aria-expanded="false" aria-controls="collapseDHCP">
-									DHCP
-								</div>
-								</h5>
-							</div>
-							<div id="collapseDHCP" class="collapse" aria-labelledby="headingDHCP" data-parent="#accordion">
-								<div class="card-body">
-									No data yet.
+									<p>Here you can see the list of tabs/options that will be added soon:</p>
+									<ul>
+										<li>Databases
+											<ul>
+												<li>Redis</li>
+											</ul>
+										</li>
+										<li>Timezones</li>
+										<li>DHCP Servers</li>
+										<li>Orchestration
+											<ul>
+												<li>Docker</li>
+												<li>Kubernetes</li>
+											</ul>
+										</li>
+									</ul>
+									<p>If you have any suggestions write me to <a href="#">artik2607@gmail.com</a>.</p>
 								</div>
 							</div>
 						</div>

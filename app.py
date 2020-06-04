@@ -249,14 +249,25 @@ def project_delete(username, name):
 def project_share(username, name):
 	return redirect(url_for("projects", username=username))
 
-@app.route('/tests/<error>')
-def tests(error):
-	abort(int(error))
-	return redirect(url_for("start"))
-
 @login_manager.user_loader
 def load_user(user_id):
 	return Users.query.get(int(user_id))
+
+@app.errorhandler(400)
+def bad_request(error):
+	return render_template("error.html",message="There are errors in request.", image=url_for('static', filename='img/400.jpg'), sizing="col-10 col-sm-9 col-md-7 col-lg-6 col-xl-4"), 400
+
+@app.errorhandler(403)
+def forbidden(error):
+	return render_template("error.html",message="You don't have permission to access this resource.", image=url_for('static', filename='img/403.jpg'), sizing="col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4"), 403
+
+@app.errorhandler(404)
+def page_not_found(error):
+	return render_template("error.html",message="Requested resource doesn't exist.", image=url_for('static', filename='img/404.jpg'), sizing="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-6"), 404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+	return render_template("error.html",message="Sorry, server can not process the request.", image=url_for('static', filename='img/500.jpg'), sizing="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5"), 500
 
 def generatePlaybook(form):
 	try:
@@ -282,7 +293,8 @@ def generatePlaybook(form):
 		if form.install_php.data:
 			temp = Templates.query.get('php_tasks').text
 			tasks += render_template_string(temp, version=form.version_php.data)
-		
+
+
 		#Python
 		if form.install_python.data:
 			temp = Templates.query.get('python_tasks').text
@@ -293,21 +305,34 @@ def generatePlaybook(form):
 		if form.install_db.data:
 			if form.db_types.data == 'mysql':
 				temp = Templates.query.get('mysql_tasks').text
-				tasks += render_template_string(temp, 
+				tasks += render_template_string(temp,
 					db_delete_anonymous=form.db_delete_anonymous.data, 
-					db_delete_test=form.db_delete_test.data, 
-					db_create_user=form.db_create_user.data, 
-					db_username=form.db_username.data, 
+					db_delete_test=form.db_delete_test.data,
+					db_create_db=form.db_create_db.data,
+					db_name=form.db_name.data,
+					db_create_user=form.db_create_user.data,
+					db_username=form.db_username.data,
 					db_password=form.db_password.data
 				)
 			elif form.db_types.data == 'postgresql':
-				pass
+				temp = Templates.query.get('postgresql_tasks').text
+				tasks += render_template_string(temp,
+					db_create_db=form.db_create_db.data,
+					db_name=form.db_name.data,
+					db_create_user=form.db_create_user.data,
+					db_username=form.db_username.data,
+					db_password=form.db_password.data
+				)
 			else:
-				pass
+				temp = Templates.query.get('sqlite_tasks').text
+				tasks += render_template_string(temp,
+					db_dir=form.db_dir.data,
+					db_create_db=form.db_create_db.data,
+					db_name=form.db_name.data + '.db'
+				)
 
 
-
-
+		#Soon
 
 
 	except:
@@ -315,28 +340,5 @@ def generatePlaybook(form):
 	
 	playbook = playbook + tasks + handlers
 	return playbook
-
-@app.errorhandler(400)
-def bad_request(error):
-	return render_template("error.html",message="There are errors in request.", image=url_for('static', filename='img/400.jpg'), sizing="col-10 col-sm-9 col-md-7 col-lg-6 col-xl-4"), 400
-
-@app.errorhandler(403)
-def forbidden(error):
-	return render_template("error.html",message="You don't have permission to access this resource.", image=url_for('static', filename='img/403.jpg'), sizing="col-9 col-sm-8 col-md-6 col-lg-5 col-xl-4"), 403
-
-@app.errorhandler(404)
-def page_not_found(error):
-	return render_template("error.html",message="Requested resource doesn't exist.", image=url_for('static', filename='img/404.jpg'), sizing="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-6"), 404
-
-@app.errorhandler(500)
-def internal_server_error(error):
-	return render_template("error.html",message="Sorry, server can not process the request.", image=url_for('static', filename='img/500.jpg'), sizing="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5"), 500
-
-
-
-
-
-
-
 
 

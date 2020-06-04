@@ -47,8 +47,11 @@ class MainForm(FlaskForm):
 	#Databases
 	install_db = BooleanField('Install database', default=False)
 	db_types = RadioField('Database management system', choices=[('mysql','MySQL'),('postgresql','PostgreSQL'),('sqlite','SQLite')], default='mysql')
-	db_delete_anonymous = BooleanField('Delete anonymous user', default=False)
-	db_delete_test = BooleanField('Delete test database', default=False)
+	db_delete_anonymous = BooleanField('Delete anonymous user (MySQL)', default=False)
+	db_delete_test = BooleanField('Delete test database (MySQL)', default=False)
+	db_dir = StringField('SQLite directory', default='/var/lib/sqlite')
+	db_create_db = BooleanField('Create database', default=False)
+	db_name =  StringField('Database name', validators=[RequiredIf('db_create_db'), Length(message=u'Database name length must be in the range 3-20 characters', min=3, max=20)])
 	db_create_user = BooleanField('Create user', default=False)
 	db_username = StringField('Username', validators=[RequiredIf('db_create_user'), Length(message=u'Username length must be in the range 3-20 characters', min=3, max=20)])
 	db_password = StringField('Password', validators=[RequiredIf('db_create_user'), Length(message=u'Password length must be in the range 6-20 characters', min=6, max=20)])
