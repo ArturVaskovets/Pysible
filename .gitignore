@@ -11,7 +11,8 @@ __pycache__
 data.db
 
 #User projects
-user_projects/*
+user_projects
 
 #Only for developers
 tests
+test_users.json
