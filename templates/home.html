@@ -186,7 +186,7 @@
 									</div>
 									<div class="form-group">
 										{{ form.db_types.label() }}
-										<div class="form-control">
+										<div class="border rounded p-2">
 											<div class="row text-sm-center">
 												{% for db_type in form.db_types %}
 												<div class="col-sm">
@@ -202,7 +202,7 @@
 									<p class="text-justify">Options. Each system has its own kit of options (corresponding column). If you check an option of other system it will not be applied.</p>
 									<div class="row mb-3">
 										<div class="col-sm">
-											<div class="form-group form-control" style="height: 100%;">
+											<div class="form-group border rounded p-2" style="height: 100%;">
 												<div class="form-check">
 													{{ form.db_delete_anonymous(class="form-check-input") }}
 													{{ form.db_delete_anonymous.label(class="form-check-label") }}
@@ -215,13 +215,13 @@
 										</div>
 										<div class="col-sm"></div>
 										<div class="col-sm">
-											<div class="form-group form-control" style="height: 100%;">
+											<div class="form-group border rounded p-2" style="height: 100%;">
 												{{ form.db_dir.label() }}
 												{{ form.db_dir(class="form-control") }}
 											</div>
 										</div>
 									</div>
-									<div class="form-group form-control">
+									<div class="form-group border rounded p-2">
 										<div class="form-check mb-3">
 											{{ form.db_create_db(class="form-check-input") }}
 											{{ form.db_create_db.label(class="form-check-label") }}
@@ -233,7 +233,7 @@
 									</div>
 									<div class="row">
 										<div class="col-8">
-											<div class="form-group form-control">
+											<div class="form-group border rounded p-2">
 												<div class="form-check mb-3">
 													{{ form.db_create_user(class="form-check-input") }}
 													{{ form.db_create_user.label(class="form-check-label") }}
