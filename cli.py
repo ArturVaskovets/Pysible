@@ -61,10 +61,11 @@ def wipe_projects():
 		db.session.delete(project)
 		db.session.commit()
 
-	path = app.config["PROJECTS_DIR"] + "/"
+	path = app.config["PROJECTS_DIR"]
 	if os.path.exists(path):
 		shutil.rmtree(path)
 	os.makedirs(path)
+	os.chown(path, app.config["APP_UID"], app.config["APP_GID"])
 
 
 bpflask = Blueprint('bpflask', __name__, cli_group=None)
