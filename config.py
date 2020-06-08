@@ -8,5 +8,5 @@ APP_UID = os.stat(os.path.join(PWD, 'app.py')).st_uid # Get application owners u
 APP_GID = os.stat(os.path.join(PWD, 'app.py')).st_gid # Get application owners uid
 
 DEBUG = False
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://username:password@localhost/Pysible' # Change me
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://username:password@username.mysql.pythonanywhere-services.com/database' # Change me
 SQLALCHEMY_TRACK_MODIFICATIONS = False
