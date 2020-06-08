@@ -1,5 +1,14 @@
 {% extends "bootstrap/base.html" %}
 
+{% block head %}
+	{{ super() }}
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+{% endblock %}
+
+
 {% block navbar %}
 <nav class="navbar navbar-expand-lg py-1 navbar-light border-bottom box-shadow" style="background-color: #3CA3A3">
 	<div class="container">
