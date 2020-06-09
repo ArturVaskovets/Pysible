@@ -1,1 +1,0 @@
-Delete this file and override this directory with a virtualenv
