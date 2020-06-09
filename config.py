@@ -5,5 +5,5 @@ PWD = os.path.abspath(os.curdir)
 PROJECTS_DIR = '{}/user_projects/'.format(PWD)
 
 DEBUG = False
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
+SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 SQLALCHEMY_TRACK_MODIFICATIONS = False
