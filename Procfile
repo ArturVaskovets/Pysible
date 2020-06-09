@@ -1,1 +1,1 @@
-env PYTHONPATH=$PYTHONPATH:/app gunicorn app:app
+env PYTHONPATH=$PYTHONPATH:/app gunicorn -b 0.0.0.0:$PORT app:app
