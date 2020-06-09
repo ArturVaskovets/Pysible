@@ -2,8 +2,8 @@ from flask import Flask, render_template, render_template_string, Response, abor
 from flask_bootstrap import Bootstrap # pylint: disable=import-error
 from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
 from flask_login import LoginManager, login_user, logout_user, login_required,	current_user # pylint: disable=import-error
-from Pysible import config
-from Pysible.forms import MainForm, LoginForm, SignupForm, AccountEditForm
+import config
+from forms import MainForm, LoginForm, SignupForm, AccountEditForm
 import os
 import shutil
 
@@ -16,10 +16,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-from Pysible.cli import bpdatabase, bpflask
+from cli import bpdatabase, bpflask
 app.register_blueprint(bpdatabase)
 app.register_blueprint(bpflask)
-from Pysible.models import Templates, Users, Projects
+from models import Templates, Users, Projects
 
 @app.route('/', methods=["get","post"])
 def start():
