@@ -1,1 +1,1 @@
-web: gunicorn app.wsgi
+env PYTHONPATH=$PYTHONPATH:$PWD/src gunicorn app:app
