@@ -8,7 +8,7 @@ import shutil
 
 app = Flask(__name__)
 
-from Pysible import config
+import config
 app.config.from_object(config)
 Bootstrap(app)
 db = SQLAlchemy(app)
@@ -17,10 +17,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-from Pysible.cli import bpdatabase, bpflask
+from cli import bpdatabase, bpflask
 app.register_blueprint(bpdatabase)
 app.register_blueprint(bpflask)
-from Pysible.models import Templates, Users, Projects
+from models import Templates, Users, Projects
 
 @app.route('/', methods=["get","post"])
 def start():
