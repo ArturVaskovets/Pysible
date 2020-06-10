@@ -2,7 +2,7 @@ from flask import Flask, render_template, render_template_string, Response, abor
 from flask_bootstrap import Bootstrap # pylint: disable=import-error
 from flask_sqlalchemy import SQLAlchemy # pylint: disable=import-error
 from flask_login import LoginManager, login_user, logout_user, login_required,	current_user # pylint: disable=import-error
-from Pysible.forms import MainForm, LoginForm, SignupForm, AccountEditForm
+from forms import MainForm, LoginForm, SignupForm, AccountEditForm
 import os
 import shutil
 
