@@ -8,5 +8,9 @@ APP_UID = os.stat(os.path.join(PWD, 'app.py')).st_uid # Get application owners u
 APP_GID = os.stat(os.path.join(PWD, 'app.py')).st_gid # Get application owners uid
 
 DEBUG = False
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://username:password@localhost/Pysible' # Change me
+db_user = os.environ.get('CLOUD_SQL_USERNAME')
+db_password = os.environ.get('CLOUD_SQL_PASSWORD')
+db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
+db_connection_name = '/cloudsql/' + os.environ.get('CLOUD_SQL_CONNECTION_NAME')
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}?unix_socket={}'.format(db_user, db_password, db_name, db_connection_name)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
