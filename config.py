@@ -1,5 +1,5 @@
 import os
-from Pysible.app import app
+from Pysible.main import app
 
 SECRET_KEY = b'w\x17\xf10\x1a\xde\xab~\xb9\xd2\x04\xe5\xc0\x81\xd8\xdc'
 PWD = os.path.normpath(app.root_path)

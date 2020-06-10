@@ -1,6 +1,6 @@
 import click # pylint: disable=import-error
 from flask import Blueprint # pylint: disable=import-error
-from Pysible.app import db, app
+from Pysible.main import db, app
 from Pysible.models import Templates, Users, Projects
 import json
 import shutil

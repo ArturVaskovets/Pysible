@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey # pylint: disable=import-error
 from sqlalchemy.orm import relationship # pylint: disable=import-error
 from werkzeug.security import generate_password_hash, check_password_hash # pylint: disable=import-error
-from Pysible.app import db
+from Pysible.main import db
 
 class Templates(db.Model):
 	"""Ansible task templates"""
