@@ -16,5 +16,5 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV FLASK_APP /var/www/html/Pysible/app.py
 EXPOSE 80
 WORKDIR /var/www/html/Pysible
-COPY ./run.sh /
-ENTRYPOINT ["/run.sh"]
+RUN chmod +x /var/www/html/Pysible/run.sh
+ENTRYPOINT ["/var/www/html/Pysible/run.sh"]
