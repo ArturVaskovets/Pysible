@@ -11,7 +11,7 @@ Development version adapted for [SQLite](https://www.sqlite.org/). Do not use in
 - Modify ```config.py```. Change ```SECRET_KEY```, ```PROJECTS_DIR``` and ```SQLALCHEMY_DATABASE_URI``` variables if needed.
 - Export FLASK_APP variable: ```export FLASK_APP="$(pwd)/app.py"```
 - Initialize the app (use ```-d``` option to add test users): ```flask init_app```
-- Set up admin user: ```flask set_admin <username>```
+- Set up admin user (if registered): ```flask set_admin <username>```
 - Run the app: ```flask run -h 0.0.0.0 -p 80```
 
 ## CLI Commands
