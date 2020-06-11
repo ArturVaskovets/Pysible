@@ -1,9 +1,6 @@
-## Pysible
+# Pysible for Google App Engine
 
-Pysible is a simple playbook generator for Ansible projects.
+Production version adapted for [Google App Engine](https://cloud.google.com/appengine). You could check it on https://pysible.appspot.com but it's disabled now.
 
-Inspired by [Phansible](http://phansible.com)
 
-The project was created with [Python 3](https://www.python.org/), using [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework.
-
-## The project is in development process
+## Currently not working
