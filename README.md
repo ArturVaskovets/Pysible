@@ -18,7 +18,7 @@ Production version adapted for [PythonAnywhere](https://www.pythonanywhere.com).
 - Set up admin user (if registered): ```flask set_admin <username>```
 - Go back to web interface.
 - Create a new web app.
-- Enter virtal environment path.
+- Enter virtual environment path.
 - Copy app.wsgi content to the WSGI configuration file proposed by PythonAnywhere.
 - Force HTTPS if needed.
 - Finally, reload the app.
