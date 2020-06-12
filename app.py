@@ -233,14 +233,14 @@ def project_delete(username, name):
 	path = app.config["PROJECTS_DIR"] + username + "/"
 	filename = name + ".yaml"
 
-	if not os.path.isfile(path + filename):
-		abort(404)
-		
-	os.remove(path + filename)
-
 	project = Projects.query.filter_by(user_id=user.id, name=name).first()
+	if project is None:
+		abort(404)
 	db.session.delete(project)
 	db.session.commit()
+
+	if os.path.isfile(path + filename): # Only for Heroku. Not throwing exception
+		os.remove(path + filename)
 
 	return redirect(url_for("projects", username=username))
 
