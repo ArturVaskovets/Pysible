@@ -7,7 +7,7 @@ class Templates(db.Model):
 	"""Ansible task templates"""
 	__tablename__ = 'templates'
 	id = Column(String(100), primary_key = True, nullable=False)
-	text = Column(String(1000), nullable=False) 
+	text = Column(String(2000), nullable=False)
 
 class Projects(db.Model):
 	"""Projects of each user"""
